@@ -16,4 +16,13 @@ $ .\env\Scripts\activate
 ```bash
 $ conda create -n tensorflow_env tensorflow
 $ conda activate tensorflow_env
+$ python -m pip install --upgrade pip
+$ pip install --upgrade tensorflow
 $ conda deactivate
+```
+
+### Check if it works
+```python
+>> import tensorflow as tf
+>> tf.__version__
+```
