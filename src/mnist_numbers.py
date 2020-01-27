@@ -1,14 +1,12 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
-import tensorflow as tf
-# Construct a tf.data.Dataset
-#from tensorflow.examples.tutorials.mnist import input_data
-import input_data as input_data
+
+import tensorflow.compat.v1 as tf
+import tensorflow_datasets as dataset
 
 if __name__ == "__main__":
+    tf.disable_v2_behavior()
     # Загружаем MNIST датасет - числа, написанные от руки
-    #mnist = tfds.load(name="mnist", split=tfds.Split.TRAIN)
-    #mnist = tensorflow_datasets.load('mnist')
-    mnist = input_data.read_data_sets("MNIST_data", one_hot=True)
+    mnist = dataset.load('mnist')
 
     # Задаем граф вычислений в тензорфлоу
     # Плейсхолдеры - те места, куда будут подставляться значения входных-выходных переменных
