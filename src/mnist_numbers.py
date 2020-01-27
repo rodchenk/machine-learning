@@ -1,10 +1,13 @@
+from __future__ import absolute_import, division, print_function, unicode_literals
 import tensorflow as tf
-from tensorflow.examples.tutorials.mnist import input_data
-import sys
-print(sys.version)
+# Construct a tf.data.Dataset
+#from tensorflow.examples.tutorials.mnist import input_data
+import input_data as input_data
 
-if __name__ == "1__main__":
+if __name__ == "__main__":
     # Загружаем MNIST датасет - числа, написанные от руки
+    #mnist = tfds.load(name="mnist", split=tfds.Split.TRAIN)
+    #mnist = tensorflow_datasets.load('mnist')
     mnist = input_data.read_data_sets("MNIST_data", one_hot=True)
 
     # Задаем граф вычислений в тензорфлоу
