@@ -3,7 +3,7 @@ Get started with machine learning and TensorFlow (tf v.2.1.0, Python v.3.7.6, An
 
 ### Set and manage virtual environment
 
-```bash
+```php
 $ py -m pip install --upgrade pip
 $ py -m pip install --user virtualenv
 $ py -m venv env
@@ -13,7 +13,7 @@ $ .\env\Scripts\activate
 ```
 ### Or set venv with Anaconda
 
-```bash
+```php
 $ conda create -n tensorflow_env tensorflow
 $ conda activate tensorflow_env
 $ python -m pip install --upgrade pip
