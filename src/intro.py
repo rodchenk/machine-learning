@@ -1,6 +1,7 @@
 import tensorflow.compat.v1 as tf
 
 if __name__ == '__main__':
+	tf.logging.set_verbosity(tf.logging.ERROR)
 	tf.disable_v2_behavior()
 
 	x1 = tf.constant([2,2,3,4])
