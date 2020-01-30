@@ -1,4 +1,4 @@
-# machine-learning
+# ML with Tensorflow and Keras
 Get started with machine learning and TensorFlow (tf v.2.1.0, Python v.3.7.6, Anaconda v.4.7.12, pip v.20.0.2)
 
 ### Set and manage virtual environment
@@ -24,5 +24,5 @@ $ conda deactivate
 ### Check if it works
 ```python
 >> import tensorflow as tf
->> tf.__version__
+>> tf.VERSION
 ```
