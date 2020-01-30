@@ -55,14 +55,19 @@ def create_model():
 def restore_and_evaluate(model, test_dataset):
 	model_acc(model, test_dataset, message='Untrained model')
 
-	model.load_weights(get_chkpath())
-	model_acc(model, test_dataset, message='Restored model') #getting model accuracy loading weights
+	new_model = tf.keras.models.load_model('models/fashion.h5')
+	#model.load_weights(get_chkpath())
+	model_acc(new_model, test_dataset, message='Restored model') #getting model accuracy loading weights
+
+def save_hdf5(model):
+	model.save('models/fashion.h5')
 
 def train_and_evaluate(model, train_dataset, test_dataset, num_train_examples):
-	# Create a callback that saves the model's weights
-	cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=get_chkpath(), save_weights_only=True, verbose=1)
+	# no needed anymore, we use h5 format to store the model (callbacks=[cp_callback])
+	# cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=get_chkpath(), save_weights_only=True, verbose=1) 
+	model.fit(train_dataset, epochs=2, steps_per_epoch=math.ceil(num_train_examples/BATCH_SIZE))
+	save_hdf5(model)
 
-	model.fit(train_dataset, epochs=2, steps_per_epoch=math.ceil(num_train_examples/BATCH_SIZE), callbacks=[cp_callback])
 	model_acc(model, test_dataset)
 
 def __main():
