@@ -5,6 +5,7 @@ import tensorflow as tf
 import tensorflow_datasets as tfds
 import numpy as np
 
+import os
 import math
 import tqdm
 import tqdm.auto
@@ -15,7 +16,6 @@ class_names = ['Футболка', "Шорты", "Свитер", "Платье",
 def normalize(images, labels):
   	images = tf.cast(images, tf.float32)
   	images /= 255
-  	#images = images.reshape(4, 28, 28, 1)
   	return images, labels
 
 def mirror(images, labels):
@@ -30,16 +30,7 @@ def model_acc(model, dataset):
 	test_loss, test_accuracy = model.evaluate(dataset)
 	print("Accuracy on test dataset: ", test_accuracy)
 
-def __main():
-	dataset, metadata = tfds.load('fashion_mnist', as_supervised=True, with_info=True)
-	train_dataset, test_dataset = dataset['train'], dataset['test']
-
-	num_train_examples = metadata.splits['train'].num_examples
-	num_test_examples = metadata.splits['test'].num_examples
-
-	train_dataset = train_dataset.map(normalize)
-	test_dataset = test_dataset.map(normalize).map(mirror)
-
+def create_model():
 	model = tf.keras.Sequential()
 
 	model.add( tf.keras.layers.Conv2D(32, (3,3), padding='same', data_format=None, activation=tf.nn.relu, input_shape=(28, 28, 1)) )
@@ -52,11 +43,32 @@ def __main():
 
 	model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
+	return model
+
+def __main():
+	dataset, metadata = tfds.load('fashion_mnist', as_supervised=True, with_info=True)
+	train_dataset, test_dataset = dataset['train'], dataset['test']
+
+	num_train_examples = metadata.splits['train'].num_examples
+	num_test_examples = metadata.splits['test'].num_examples
+
+	train_dataset = train_dataset.map(normalize)
+	test_dataset = test_dataset.map(normalize).map(mirror)
+
+	model = create_model()
+	model.summary()
+
+	checkpoint_path = "models/fashion_mnist/fashion_mnist.ckpt"
+	checkpoint_dir = os.path.dirname(checkpoint_path)
+
+	# Create a callback that saves the model's weights
+	cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path, save_weights_only=True, verbose=1)
+
 	BATCH_SIZE = 32
 	train_dataset = train_dataset.repeat().shuffle(num_train_examples).batch(BATCH_SIZE)
 	test_dataset = test_dataset.batch(BATCH_SIZE)
 
-	model.fit(train_dataset, epochs=2, steps_per_epoch=math.ceil(num_train_examples/BATCH_SIZE))
+	model.fit(train_dataset, epochs=2, steps_per_epoch=math.ceil(num_train_examples/BATCH_SIZE), callbacks=[cp_callback])
 
 	model_acc(model, test_dataset) #getting model accuracy after training
 
