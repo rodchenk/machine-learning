@@ -21,9 +21,9 @@ $ .\env\Scripts\activate
 
 $ conda create -n tensorflow_env tensorflow
 $ conda activate tensorflow_env
-$ python -m pip install --upgrade pip
-$ pip install --upgrade tensorflow
-$ conda deactivate
+(env) python -m pip install --upgrade pip
+(env) pip install --upgrade tensorflow
+(env) conda deactivate
 ```
 
 ### Check if it works
@@ -36,6 +36,8 @@ $ conda deactivate
 All models are stored in [h5](https://en.wikipedia.org/wiki/Hierarchical_Data_Format) format. It's easy to restore the model with its weight and variables and start working without having to re-train the model again
 
 ### Fashion
+
+The model was trained with fashion_mnist dataset:
 
 ```python
 @TODO
