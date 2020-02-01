@@ -47,18 +47,23 @@ import numpy as np
 
 def rgb2gray(rgb):
   return np.dot(rgb[...,:3], [0.2989, 0.5870, 0.1140])
+ 
+def main():
+  model = tf.keras.models.load_model('models/fashion.h5')
+  image_file = rgb2gray( mpimg.imread('custom_data/2_s28.png') ).reshape(28, 28, 1)
 
-image_file = rgb2gray( mpimg.imread('custom_data/2_s28.png') ).reshape(28, 28, 1)
+  filenames = tf.constant([image_file])
+  labels = tf.constant([0])
 
-filenames = tf.constant([image_file])
-labels = tf.constant([0])
+  dataset = tf.data.Dataset.from_tensor_slices((filenames, labels))
+  dataset = dataset.batch(BATCH_SIZE)
 
-dataset = tf.data.Dataset.from_tensor_slices((filenames, labels))
-dataset = dataset.batch(BATCH_SIZE)
-
-for img, label in dataset.take(1):
-  predictions = model.predict(img)
-  suggestion = np.argmax(predictions)
-  print(FASHION_FEATURES[suggestion])
-  break
+  for img, label in dataset.take(1):
+    predictions = model.predict(img)
+    suggestion = np.argmax(predictions)
+    print(FASHION_FEATURES[suggestion])
+    break
+ 
+if __name__ == '__main__':
+  main()    
 ```
