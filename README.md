@@ -37,7 +37,7 @@ All models are stored in [h5](https://en.wikipedia.org/wiki/Hierarchical_Data_Fo
 
 ### Fashion
 
-The model was trained with fashion_mnist dataset:
+The model was trained with fashion_mnist dataset. You can predict own images:
 
 ```python
 from mnist_fashion import FASHION_FEATURES
