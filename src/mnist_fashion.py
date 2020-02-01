@@ -1,9 +1,11 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 from matplot import plot_image, plot_value_array, show_simple_pic
+import matplotlib.image as mpimg
 
 import tensorflow as tf
 import tensorflow_datasets as tfds
 import numpy as np
+from PIL import Image
 
 import os
 import math
@@ -70,6 +72,27 @@ def train_and_evaluate(model, train_dataset, test_dataset, num_train_examples):
 
 	model_acc(model, test_dataset)
 
+def rgb2gray(rgb):
+	return np.dot(rgb[...,:3], [0.2989, 0.5870, 0.1140])
+
+def evaluate_custom_data():
+	model = tf.keras.models.load_model('models/fashion.h5')
+	
+	image_file = mpimg.imread('custom_data/2_s28.png')
+	image_file = rgb2gray(image_file).reshape(28, 28, 1)
+
+	filenames = tf.constant([image_file])
+	labels = tf.constant([0])
+
+	dataset = tf.data.Dataset.from_tensor_slices((filenames, labels))
+	dataset = dataset.batch(BATCH_SIZE)
+
+	for img, label in dataset.take(1):
+		predictions = model.predict(img)
+		suggestion = np.argmax(predictions)
+		print(FASHION_FEATURES[suggestion])
+		break
+
 def __main():
 	dataset, metadata = tfds.load('fashion_mnist', as_supervised=True, with_info=True)
 	train_dataset, test_dataset = dataset['train'].map(normalize), dataset['test'].map(normalize)
@@ -88,4 +111,5 @@ def __main():
 		
 
 if __name__ == '__main__':
-	__main()
+	#__main()
+	evaluate_custom_data()
