@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from matplot import plot_image, plot_value_array, show_simple_pic
 import matplotlib.image as mpimg
 
+import matplotlib.pyplot as plt
 import tensorflow as tf
 import tensorflow_datasets as tfds
 import numpy as np
@@ -25,7 +26,7 @@ def normalize(images, labels):
 def mirror(images, labels):
 	return tf.image.flip_up_down(images), labels
 
-def simple_display(dastaset):
+def simple_display(dataset):
 	for image, label in dataset.take(1):
 		print('This is %s'%FASHION_FEATURES[label.numpy()])
 		show_simple_pic(image)
@@ -56,9 +57,7 @@ def create_model():
 
 def restore_and_evaluate(model, test_dataset):
 	model_acc(model, test_dataset, message='Untrained model')
-
 	new_model = tf.keras.models.load_model('models/fashion.h5')
-	#model.load_weights(get_chkpath())
 	model_acc(new_model, test_dataset, message='Restored model') #getting model accuracy loading weights
 
 def save_hdf5(model):
@@ -78,20 +77,30 @@ def rgb2gray(rgb):
 def evaluate_custom_data():
 	model = tf.keras.models.load_model('models/fashion.h5')
 	
-	image_file = mpimg.imread('custom_data/2_s28.png')
-	image_file = rgb2gray(image_file).reshape(28, 28, 1)
+	image_file_1 = rgb2gray(mpimg.imread('custom_data/1_s28.png')).reshape(28, 28, 1)
+	image_file_2 = rgb2gray(mpimg.imread('custom_data/2_s28.png')).reshape(28, 28, 1)
+	image_file_3 = rgb2gray(mpimg.imread('custom_data/3_s28.png')).reshape(28, 28, 1)
+	image_file_4 = rgb2gray(mpimg.imread('custom_data/4_s28.png')).reshape(28, 28, 1)
 
-	filenames = tf.constant([image_file])
-	labels = tf.constant([0])
+	filenames = tf.constant([image_file_1, image_file_2, image_file_3, image_file_4])
+	labels = tf.constant([1, 1, 7, 6])
 
 	dataset = tf.data.Dataset.from_tensor_slices((filenames, labels))
-	dataset = dataset.batch(BATCH_SIZE)
+	dataset = dataset.batch(1)
 
-	for img, label in dataset.take(1):
-		predictions = model.predict(img)
-		suggestion = np.argmax(predictions)
-		print(FASHION_FEATURES[suggestion])
-		break
+	# dataset, metadata = tfds.load('fashion_mnist', as_supervised=True, with_info=True)
+	# test_dataset = dataset['test'].map(normalize)
+	# test_dataset = test_dataset.batch(BATCH_SIZE)
+
+	model_acc(model, dataset, message='Custom dataset')
+
+	# for img, label in dataset.take(1):
+	# 	predictions = model.predict(img)
+	# 	suggestion = np.argmax(predictions)
+	# 	print(predictions)
+	# 	print(FASHION_FEATURES[suggestion])
+	# 	show_simple_pic(img)
+	# 	break
 
 def __main():
 	dataset, metadata = tfds.load('fashion_mnist', as_supervised=True, with_info=True)
