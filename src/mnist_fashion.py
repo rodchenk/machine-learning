@@ -77,30 +77,26 @@ def rgb2gray(rgb):
 def evaluate_custom_data():
 	model = tf.keras.models.load_model('models/fashion.h5')
 	
-	image_file_1 = rgb2gray(mpimg.imread('custom_data/1_s28.png')).reshape(28, 28, 1)
-	image_file_2 = rgb2gray(mpimg.imread('custom_data/2_s28.png')).reshape(28, 28, 1)
-	image_file_3 = rgb2gray(mpimg.imread('custom_data/3_s28.png')).reshape(28, 28, 1)
-	image_file_4 = rgb2gray(mpimg.imread('custom_data/4_s28.png')).reshape(28, 28, 1)
+	image_file_1 = rgb2gray(mpimg.imread('custom_data/10_s28.png')).reshape(28, 28, 1)
+	# image_file_2 = rgb2gray(mpimg.imread('custom_data/2_s28.png')).reshape(28, 28, 1)
+	# image_file_3 = rgb2gray(mpimg.imread('custom_data/3_s28.png')).reshape(28, 28, 1)
+	# image_file_4 = rgb2gray(mpimg.imread('custom_data/4_s28.png')).reshape(28, 28, 1)
 
-	filenames = tf.constant([image_file_1, image_file_2, image_file_3, image_file_4])
-	labels = tf.constant([1, 1, 7, 6])
+	filenames = tf.constant([image_file_1])
+	labels = tf.constant([1])
+
 
 	dataset = tf.data.Dataset.from_tensor_slices((filenames, labels))
 	dataset = dataset.batch(1)
 
-	# dataset, metadata = tfds.load('fashion_mnist', as_supervised=True, with_info=True)
-	# test_dataset = dataset['test'].map(normalize)
-	# test_dataset = test_dataset.batch(BATCH_SIZE)
-
-	model_acc(model, dataset, message='Custom dataset')
-
-	# for img, label in dataset.take(1):
-	# 	predictions = model.predict(img)
-	# 	suggestion = np.argmax(predictions)
-	# 	print(predictions)
-	# 	print(FASHION_FEATURES[suggestion])
-	# 	show_simple_pic(img)
-	# 	break
+	for img, label in dataset.take(1):
+		predictions = model.predict(img)
+		suggestion = np.argmax(predictions)
+		for sug, label in zip(predictions[0], FASHION_FEATURES):
+			print('{:.2f}%\t{}'.format(float(sug)*100, label))
+		print(FASHION_FEATURES[suggestion])
+		show_simple_pic(img)
+		break
 
 def __main():
 	dataset, metadata = tfds.load('fashion_mnist', as_supervised=True, with_info=True)
