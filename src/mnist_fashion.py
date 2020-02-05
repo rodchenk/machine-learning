@@ -9,12 +9,14 @@ import numpy as np
 from PIL import Image
 
 import os
+import glob
 import math
 import tqdm
 import tqdm.auto
 tqdm.tqdm = tqdm.auto.tqdm
 
 FASHION_FEATURES = ['Футболка', "Шорты", "Свитер", "Платье", "Плащ", "Сандали", "Рубашка", "Кроссовок", "Сумка", "Ботинок"]
+FASHION_FEATURES_ENG = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
 BATCH_SIZE = 32
 SHOULD_RESTORE = True
 
@@ -78,15 +80,8 @@ def evaluate_custom_data():
 	model = tf.keras.models.load_model('models/fashion.h5')
 	
 	image_file_1 = rgb2gray(mpimg.imread('custom_data/10_s28.png')).reshape(28, 28, 1)
-	# image_file_2 = rgb2gray(mpimg.imread('custom_data/2_s28.png')).reshape(28, 28, 1)
-	# image_file_3 = rgb2gray(mpimg.imread('custom_data/3_s28.png')).reshape(28, 28, 1)
-	# image_file_4 = rgb2gray(mpimg.imread('custom_data/4_s28.png')).reshape(28, 28, 1)
 
-	filenames = tf.constant([image_file_1])
-	labels = tf.constant([1])
-
-
-	dataset = tf.data.Dataset.from_tensor_slices((filenames, labels))
+	dataset = tf.data.Dataset.from_tensor_slices((tf.constant([image_file_1]), tf.constant([1])))
 	dataset = dataset.batch(1)
 
 	for img, label in dataset.take(1):
@@ -97,6 +92,33 @@ def evaluate_custom_data():
 		print(FASHION_FEATURES[suggestion])
 		show_simple_pic(img)
 		break
+
+def predict_images():
+	model = tf.keras.models.load_model('models/fashion.h5')
+
+	files = glob.glob('custom_data/*.png')
+	images = [rgb2gray(mpimg.imread(x)).reshape(28, 28, 1) for x in files]
+	dataset = tf.data.Dataset.from_tensor_slices( (tf.constant(images), tf.constant([0]*10)) )
+	dataset = dataset.batch(1)
+
+	labels = []
+	for pic, lab in dataset:
+		predictions = model.predict(pic)
+		suggestion = np.argmax(predictions)
+		labels.append(FASHION_FEATURES[suggestion])
+
+	plt.figure(figsize=(10,5))
+	for i in range(10):
+		plt.subplot(2, 5, i+1)
+		plt.xticks([])
+		plt.yticks([])
+		plt.grid(False)
+
+		image = np.array(images[i], dtype='float')
+		pixels = image.reshape((28, 28))
+		plt.imshow(pixels, cmap=plt.cm.binary)
+		plt.xlabel(labels[i])
+	plt.show()
 
 def __main():
 	dataset, metadata = tfds.load('fashion_mnist', as_supervised=True, with_info=True)
@@ -117,4 +139,5 @@ def __main():
 
 if __name__ == '__main__':
 	#__main()
-	evaluate_custom_data()
+	#evaluate_custom_data()
+	predict_images()
