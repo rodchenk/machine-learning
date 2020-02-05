@@ -46,7 +46,7 @@ import tensorflow as tf
 import numpy as np
 
 def rgb2gray(rgb):
-  return np.dot(rgb[...,:3], [0.2989, 0.5870, 0.1140])
+	return np.dot(rgb[...,:3], [0.2989, 0.5870, 0.1140])
  
 def main():
 	model = tf.keras.models.load_model('models/fashion.h5')
@@ -54,11 +54,10 @@ def main():
 	files = glob.glob('custom_data/*.png')
 	images = [rgb2gray(mpimg.imread(x)).reshape(28, 28, 1) for x in files]
 
-  pics = tf.constant(images)
-  labels = tf.constant([0]*len(images))
-
-  dataset = tf.data.Dataset.from_tensor_slices((pics, labels))
-  dataset = dataset.batch(BATCH_SIZE)
+	pics = tf.constant(images)
+	labels = tf.constant([0]*len(images))
+	dataset = tf.data.Dataset.from_tensor_slices((pics, labels))
+  	dataset = dataset.batch(BATCH_SIZE)
   
 	labels = []
 	for pic, lab in dataset:
@@ -66,21 +65,21 @@ def main():
 		suggestion = np.argmax(predictions)
 		labels.append(FASHION_FEATURES[suggestion])
     
-  plt.figure(figsize=(10,5))
-  for i in range(10):
-    plt.subplot(2, 5, i+1)
-    plt.xticks([])
-    plt.yticks([])
-    plt.grid(False)
+  	plt.figure(figsize=(10,5))
+  	for i in range(10):
+	    	plt.subplot(2, 5, i+1)
+	    	plt.xticks([])
+	    	plt.yticks([])
+	 	plt.grid(False)
 
-    image = np.array(images[i], dtype='float')
-    pixels = image.reshape((28, 28))
-    plt.imshow(pixels, cmap=plt.cm.binary)
-    plt.xlabel(labels[i])
-  plt.show()
+    		image = np.array(images[i], dtype='float')
+    		pixels = image.reshape((28, 28))
+    		plt.imshow(pixels, cmap=plt.cm.binary)
+    		plt.xlabel(labels[i])
+  	plt.show()
  
 if __name__ == '__main__':
-  main()    
+  	main()    
 ```
 
 ![eng](https://user-images.githubusercontent.com/30366483/73892793-1c856100-4878-11ea-860f-eff4b53936df.png)
