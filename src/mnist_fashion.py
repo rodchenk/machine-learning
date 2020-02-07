@@ -19,6 +19,7 @@ FASHION_FEATURES = ['Футболка', "Шорты", "Свитер", "Плат�
 FASHION_FEATURES_ENG = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
 BATCH_SIZE = 32
 SHOULD_RESTORE = True
+PIC_SIZE = (28, 28)
 
 def normalize(images, labels):
   	images = tf.cast(images, tf.float32)
@@ -78,8 +79,11 @@ def rgb2gray(rgb):
 
 def evaluate_custom_data():
 	model = tf.keras.models.load_model('models/fashion.h5')
+
+	im = Image.open(r'custom_data/fashion_photos/tshirt2_photo.png').resize(PIC_SIZE)
+	image = np.asarray(im)
 	
-	image_file_1 = rgb2gray(mpimg.imread('custom_data/10_s28.png')).reshape(28, 28, 1)
+	image_file_1 = rgb2gray(image).reshape(*PIC_SIZE, 1)
 
 	dataset = tf.data.Dataset.from_tensor_slices((tf.constant([image_file_1]), tf.constant([1])))
 	dataset = dataset.batch(1)
@@ -96,7 +100,7 @@ def evaluate_custom_data():
 def predict_images():
 	model = tf.keras.models.load_model('models/fashion.h5')
 
-	files = glob.glob('custom_data/*.png')
+	files = glob.glob('custom_data/fashion/*.png')
 	images = [rgb2gray(mpimg.imread(x)).reshape(28, 28, 1) for x in files]
 	dataset = tf.data.Dataset.from_tensor_slices( (tf.constant(images), tf.constant([0]*10)) )
 	dataset = dataset.batch(1)
@@ -105,7 +109,7 @@ def predict_images():
 	for pic, lab in dataset:
 		predictions = model.predict(pic)
 		suggestion = np.argmax(predictions)
-		labels.append(FASHION_FEATURES[suggestion])
+		labels.append(FASHION_FEATURES_ENG[suggestion])
 
 	plt.figure(figsize=(10,5))
 	for i in range(10):
@@ -139,5 +143,5 @@ def __main():
 
 if __name__ == '__main__':
 	#__main()
-	#evaluate_custom_data()
-	predict_images()
+	evaluate_custom_data()
+	#predict_images()
