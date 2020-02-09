@@ -143,5 +143,5 @@ def __main():
 
 if __name__ == '__main__':
 	#__main()
-	evaluate_custom_data()
-	#predict_images()
+	#evaluate_custom_data()
+	predict_images()
