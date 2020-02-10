@@ -18,7 +18,7 @@ import tqdm.auto
 tqdm.tqdm = tqdm.auto.tqdm
 
 PIC_FOLDER = 'custom_data/compositions/'
-BOX = {'linewidth':1, 'edgecolor':'g', 'facecolor':'none'}
+BOX = {'linewidth':1, 'edgecolor':'g', 'alpha': 0.2, 'facecolor':'g'}
 
 def build_win():
 	pic = Image.open(PIC_FOLDER + 'man.jpg')
@@ -27,7 +27,7 @@ def build_win():
 	ax.imshow(im)
 	rect = patches.Rectangle((500,200), 300, 250, **BOX)
 	ax.add_patch(rect)
-	plt.text(550, 180, 'Mischa')
+	text = plt.text(570, 175, 'Person', bbox=dict(facecolor='green', alpha=0.75, edgecolor='none'))
 	plt.show()
 
 def __main():
