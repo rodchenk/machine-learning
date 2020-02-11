@@ -39,7 +39,7 @@ def model_acc(model, dataset, message=''):
 	print("\n%s accuracy on test dataset: %04.2f\n"%(message, float(100*test_accuracy) ))
 
 def get_chkpath():
-	checkpoint_path = "models/fashion_mnist/fashion_mnist.ckpt"
+	checkpoint_path = "_saved_models/fashion_mnist/fashion_mnist.ckpt"
 	checkpoint_dir = os.path.dirname(checkpoint_path)
 	return checkpoint_path
 
@@ -60,11 +60,11 @@ def create_model():
 
 def restore_and_evaluate(model, test_dataset):
 	model_acc(model, test_dataset, message='Untrained model')
-	new_model = tf.keras.models.load_model('models/fashion.h5')
+	new_model = tf.keras.models.load_model('_saved_models/fashion.h5')
 	model_acc(new_model, test_dataset, message='Restored model') #getting model accuracy loading weights
 
 def save_hdf5(model):
-	model.save('models/fashion.h5')
+	model.save('_saved_models/fashion.h5')
 
 def train_and_evaluate(model, train_dataset, test_dataset, num_train_examples):
 	# no needed anymore, we use h5 format to store the model (callbacks=[cp_callback])
@@ -78,7 +78,7 @@ def rgb2gray(rgb):
 	return np.dot(rgb[...,:3], [0.2989, 0.5870, 0.1140])
 
 def evaluate_custom_data():
-	model = tf.keras.models.load_model('models/fashion.h5')
+	model = tf.keras.models.load_model('_saved_models/fashion.h5')
 
 	im = Image.open(r'custom_data/fashion_photos/tshirt2_photo.png').resize(PIC_SIZE)
 	image = np.asarray(im)
@@ -98,7 +98,7 @@ def evaluate_custom_data():
 		break
 
 def predict_images():
-	model = tf.keras.models.load_model('models/fashion.h5')
+	model = tf.keras.models.load_model('_saved_models/fashion.h5')
 
 	files = glob.glob('custom_data/fashion/*.png')
 	images = [rgb2gray(mpimg.imread(x)).reshape(28, 28, 1) for x in files]
