@@ -1,9 +1,8 @@
-## Object detection with Tensorflow
-### Taken from [Gilbert Tanner](https://gilberttanner.com/blog/installing-the-tensorflow-object-detection-api)
+## Object detection with Tensorflow. Taken from [Gilbert Tanner](https://gilberttanner.com/blog/installing-the-tensorflow-object-detection-api)
 
 ### Install dependencies
 
-```bash
+```php
 pip install --user Cython
 pip install --user contextlib2
 pip install --user pillow
@@ -14,14 +13,14 @@ pip install --user matplotlib
 
 ### Install COCO API
 
-```bash
+```php
 pip install https://github.com/philferriere/cocoapi.git
 cp cocoapi/PythonAPI <tensorflow>/models/research/
 ```
 
 ### Install **Protobuf** from [Website](https://github.com/protocolbuffers/protobuf/releases)
 
-Then copy `proto`-folder to <\tensorflow>\/research and run the following command to compile all `.proto`-files to python:
+Then copy `proto`-folder to \<tensorflow>/research and run the following command to compile all `.proto`-files to python:
 
 ```bash
 proto/bin/protoc.exe object_detection/protos/*.proto --python_out=. 
@@ -35,7 +34,7 @@ proto/bin/protoc.exe object_detection/protos/*.proto --python_out=.
 ### To check out if everything is working correctly, import the following module:
 
 ```python
-$ python
+python
 >> import object_detection
 >> 
 ```
