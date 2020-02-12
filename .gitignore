@@ -19,3 +19,5 @@ src/__pycache__/
 models/*
 # Except object detection models:
 !models/research/object_detection
+!models/research/PythonAPI
+!models/research/protoc_3.11.3
