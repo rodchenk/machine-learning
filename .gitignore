@@ -13,3 +13,9 @@ pip-selfcheck.json
 
 # Byte-compiled / optimized / DLL files
 src/__pycache__/
+
+
+# Ignore everything:
+models/*
+# Except object detection models:
+!models/research/object_detection
