@@ -19,6 +19,8 @@ ssd_mobilenet_v1_coco_2017_11_17
 # Ignore everything:
 models/*
 # Except object detection models:
+!models/research/
+models/research/*
 !models/research/object_detection
 # !models/research/PythonAPI
 # !models/research/protoc_3.11.3
