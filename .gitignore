@@ -22,5 +22,11 @@ models/*
 !models/research/
 models/research/*
 !models/research/object_detection
+models/research/object_detection/*
+
+!models/research/object_detection/tensorflow_od_web.py
+!models/research/object_detection/tensorflow_od_image.py
+!models/research/object_detection/object_detection_tutorial.ipynb
+
 # !models/research/PythonAPI
 # !models/research/protoc_3.11.3
