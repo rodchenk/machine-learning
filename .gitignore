@@ -21,7 +21,7 @@ models/*
 # Except object detection models:
 !models/research/
 models/research/*
-!models/research/object_detection
+!models/research/object_detection/
 models/research/object_detection/*
 
 !models/research/object_detection/tensorflow_od_web.py
