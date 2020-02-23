@@ -19,10 +19,10 @@ ssd_mobilenet_v1_coco_2017_11_17
 # Ignore everything:
 models/*
 # Except object detection models:
-!models/research/
-models/research/*
-!models/research/object_detection/
-models/research/object_detection/*
+# !models/research/
+# models/research/*
+# !models/research/object_detection/
+# models/research/object_detection/*
 
 !models/research/object_detection/tensorflow_od_web.py
 !models/research/object_detection/tensorflow_od_image.py
