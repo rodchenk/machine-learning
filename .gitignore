@@ -24,7 +24,7 @@ models/*
 # !models/research/object_detection/
 # models/research/object_detection/*
 
-!*/
+# !*/
 
 !models/research/object_detection/tensorflow_od_web.py
 !models/research/object_detection/tensorflow_od_image.py
